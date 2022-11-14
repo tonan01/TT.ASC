@@ -458,3 +458,21 @@ h1,
     left: 0;
   }
 }
+
+.trangthai_thanhcong_icon {
+    background-image: url(https://sinhvien.hufi.edu.vn/Content/ThemeMXH/img/icons/ico-select-min.png);
+    background-repeat: no-repeat;
+    width: 16px;
+    height: 16px;
+    background-size: cover;
+    display: inline-block
+}
+
+.trangthai_huy_icon {
+    background-image: url(https://sinhvien.hufi.edu.vn/Content/ThemeMXH/img/icons/ico-delete-min.png);
+    background-repeat: no-repeat;
+    width: 16px;
+    height: 16px;
+    background-size: cover;
+    display: inline-block
+}
