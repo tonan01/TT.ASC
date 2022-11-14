@@ -41,7 +41,7 @@ namespace TT.DoAn.Controllers
         //json chi tiết phiếu thu
         public ActionResult Read_DanhSachChiTietPhieuThu(string pSoPhieu,[DataSourceRequest] DataSourceRequest request)
         {
-            return Json(db.sp_ChiTietPhieuThu("1002").ToList().ToDataSourceResult(request), JsonRequestBehavior.AllowGet);
+            return Json(db.sp_ChiTietPhieuThu(pSoPhieu).ToList().ToDataSourceResult(request), JsonRequestBehavior.AllowGet);
         }
         //Delete
         public ActionResult DeletePhieuThu(string pSoPhieu, [DataSourceRequest] DataSourceRequest request)

@@ -11,14 +11,17 @@
 </div>
 <div class="row">
     <div class="col-12">
+
         @(Html.Kendo().Grid <sp_DanhSachQuanLyThuResult>()
-                            .Name("grid")
+                            .Name("home")
                             .Columns(columns =>
                             {
+                                columns.Template(t => { }).Title("STT").ClientTemplate("#= renderNumber(data) #").Hidden();
+                                columns.Template(p => { }).Title("STT").ClientTemplate("#= renderRecordNumber(data) #");
                                 columns.Bound(p => p.SoPhieu).Title("Số phiếu");
                                 columns.Bound(p => p.NoiDung).Title("Nội dung thu");
-                                columns.Bound(p => p.SoTienThu).Title("Số tiền thu (VNĐ)")
-                                .ClientFooterTemplate("Tổng Tiền: #=sum#")
+                                columns.Bound(p => p.SoTienThu).Title("Số tiền thu (VNĐ)").Format("{0:n3}")
+                                .ClientFooterTemplate("Tổng Tiền: #=sum#").Format("{0:n3}")
                                 .FooterHtmlAttributes(new { style = "text-align: right; color: red" })//footer
                                 .HeaderHtmlAttributes(new { style = "text-align: center; justify-content: center" })//header
                                 .HtmlAttributes(new { style = "text-align: right" });
@@ -55,6 +58,7 @@
                             .Scrollable()
                             .Filterable()
                             .Navigatable()
+                            .ClientDetailTemplateId("chitiet")//click
                             .Groupable()//cho nhóm các lưới lại vs nhau
                             .HtmlAttributes(new { style = "height:550px;" })
                             .DataSource(dataSource => dataSource
@@ -75,29 +79,49 @@
                                 //.Update(update => update.Action("ClientsEdit", "Grid", new {id = "{0}"}).Type(HttpVerbs.Post))
                                 .Destroy(destroy => destroy.Action("DeletePhieuThu", "Home", new { pSoPhieu = "{0}"}).Type(HttpVerbs.Post))
                             )
+                            .Events(events => events.DataBound("dataBound"))
         )
-        <!--Chi Tiết-->
+        <!-- Số Thứ Tự home-->
+        <script type="text/javascript">
+            var rowNumber = 0;
 
-        <script id="template" type="text/x-jquery-tmpl">
-    @(Html.Kendo().Grid<sp_DanhSachQuanLyThuResult>()
-            .Name("ChildGrids_#=SoPhieu#")
-            .Columns(columns =>
-            {
-                columns.Bound(p => p.SoPhieu).Title("Số phiếu");
-                columns.Bound(p => p.NoiDung).Title("Nội dung thu");
-                columns.Bound(p => p.SoTienThu).Title("Số tiền thu (VNĐ)");
-                columns.Bound(p => p.NgayThanhToan).Title("Ngày thanh toán").Format("{0:d/M/yyyy HH:mm:ss}");
-                columns.Bound(p => p.TrangThai).Title("Trạng thái giao dịch");
-            })
-            .DataSource(dataSource => dataSource
-                .Ajax()
-                .PageSize(6)
-                .Read(read => read.Action("Read_DanhSachChiTietPhieuThu", "Home"))
+            function resetRowNumber(e) {
+                rowNumber = 0;
+            }
+
+            function renderNumber(data) {
+                return ++rowNumber;
+            }
+
+            function renderRecordNumber(data) {
+                var page = parseInt($("#home").data("kendoGrid").dataSource.page()) - 1;
+                var pagesize = $("#home").data("kendoGrid").dataSource.pageSize();
+                return parseInt(rowNumber + (parseInt(page) * parseInt(pagesize)));
+            }
+        </script>
+        <!--Chi Tiết-->
+        <script id="chitiet" type="text/kendo-tmpl">
+            @(Html.Kendo().Grid<sp_ChiTietPhieuThuResult>()
+                .Name("chitietphieuthu_#=SoPhieu#") // template expression, to be evaluated in the master context
+                .Columns(columns =>
+                {
+                    //columns.Bound(o => o.SoPhieu).Title("Số Phiếu");
+                    columns.Bound(o => o.MaMH).Title("Mã");
+                    columns.Bound(o => o.NoiDung).Title("Nội dung");
+                    columns.Bound(o => o.SoTien).Title("Số tiền (VNĐ)").Format("{0:n3}");
+                })
+                .Pageable()
+                .Navigatable()
+                .Sortable()
+                .DataSource(dataSource => dataSource
+                    .Ajax()
+                    .PageSize(10)
+                    .Read(read => read.Action("Read_DanhSachChiTietPhieuThu", "Home", new { pSoPhieu = "#=SoPhieu#" }))
+                )
+                .ToClientTemplate()
+
+
             )
-            .Pageable()
-            .Sortable()
-            .ToClientTemplate()
-    )
         </script>
         <script>
             function dataBound() {
