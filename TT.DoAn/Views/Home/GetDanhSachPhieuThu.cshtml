@@ -1,0 +1,209 @@
+﻿@using Kendo.Mvc.UI
+@using TT.DoAn.Models
+@{
+    ViewBag.Title = "GetDanhSachPhieuThu";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class='card'>
+    <div class='card-header'>
+        <h1>Quản Lý Phiếu Thu</h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        @(Html.Kendo().Grid <sp_DanhSachQuanLyThuResult>()
+                            .Name("grid")
+                            .Columns(columns =>
+                            {
+                                columns.Bound(p => p.SoPhieu).Title("Số phiếu");
+                                columns.Bound(p => p.NoiDung).Title("Nội dung thu");
+                                columns.Bound(p => p.SoTienThu).Title("Số tiền thu (VNĐ)")
+                                .ClientFooterTemplate("Tổng Tiền: #=sum#")
+                                .FooterHtmlAttributes(new { style = "text-align: right; color: red" })//footer
+                                .HeaderHtmlAttributes(new { style = "text-align: center; justify-content: center" })//header
+                                .HtmlAttributes(new { style = "text-align: right" });
+                                columns.Bound(p => p.NgayThanhToan).Title("Ngày thanh toán").Format("{0:d/M/yyyy HH:mm:ss}");
+                                columns.Bound(p => p.TrangThai).Title("Trạng thái giao dịch");
+                                //columns.Command(command => command.Edit()).Width(150);
+                                columns.Command(command => command.Destroy()).Width(150);
+                                // columns.Command(command => command.Custom("Chi Tiết").Click("showDetails"));
+                            })
+                            .ToolBar(toolbar =>
+                            {
+                                //toolbar.Create();
+                                //toolbar.Save();
+                                toolbar.Pdf();
+                                toolbar.Search();
+                            })
+                            .Pdf(pdf => pdf
+                            //.AllPages()
+                            .AvoidLinks()
+                            .PaperSize("A1")
+                            .Margin("2cm", "1cm", "1cm", "1cm")
+                            .Landscape()
+                            .RepeatHeaders()
+                            .TemplateId("page-template")
+                            .FileName("QuanLyPhieuThu.pdf")
+                            .ProxyURL(Url.Action("PdfExport", "Grid"))
+                            )
+                            //.Editable(editable => editable.Mode(GridEditMode.InLine))
+                            //.Pageable()
+                            .Pageable(pager => pager.AlwaysVisible(false).PageSizes(new List<object> { 5, 10, 20, 100 }))
+                            .Reorderable(reorderable => reorderable.Columns(true))// có thể thay đổi thứ tự colum
+                            .Resizable(resizable => resizable.Columns(true))//có thể chỉnh size colum
+                            .Sortable()
+                            .Scrollable()
+                            .Filterable()
+                            .Navigatable()
+                            .Groupable()//cho nhóm các lưới lại vs nhau
+                            .HtmlAttributes(new { style = "height:550px;" })
+                            .DataSource(dataSource => dataSource
+                                .WebApi()
+                                .Batch(false)
+                                .PageSize(5)
+                                .Aggregates(total=>
+                                {
+                                    total.Add(p => p.SoTienThu).Sum();//tính tổng
+                                })
+                                .ServerOperation(false)
+                                .Model(model => {
+                                    model.Id(gangster => gangster.SoPhieu);
+                                    model.Field(gangster => gangster.SoPhieu).Editable(false);
+                                })
+                                .Read(read => read.Action("Read_DanhSachPhieuThu", "Home").Type(HttpVerbs.Get))
+                                //.Create(create => create.Action("ClientCreate", "Grid").Type(HttpVerbs.Post))
+                                //.Update(update => update.Action("ClientsEdit", "Grid", new {id = "{0}"}).Type(HttpVerbs.Post))
+                                .Destroy(destroy => destroy.Action("DeletePhieuThu", "Home", new { pSoPhieu = "{0}"}).Type(HttpVerbs.Post))
+                            )
+        )
+        <!--Chi Tiết-->
+
+        <script id="template" type="text/x-jquery-tmpl">
+    @(Html.Kendo().Grid<sp_DanhSachQuanLyThuResult>()
+            .Name("ChildGrids_#=SoPhieu#")
+            .Columns(columns =>
+            {
+                columns.Bound(p => p.SoPhieu).Title("Số phiếu");
+                columns.Bound(p => p.NoiDung).Title("Nội dung thu");
+                columns.Bound(p => p.SoTienThu).Title("Số tiền thu (VNĐ)");
+                columns.Bound(p => p.NgayThanhToan).Title("Ngày thanh toán").Format("{0:d/M/yyyy HH:mm:ss}");
+                columns.Bound(p => p.TrangThai).Title("Trạng thái giao dịch");
+            })
+            .DataSource(dataSource => dataSource
+                .Ajax()
+                .PageSize(6)
+                .Read(read => read.Action("Read_DanhSachChiTietPhieuThu", "Home"))
+            )
+            .Pageable()
+            .Sortable()
+            .ToClientTemplate()
+    )
+        </script>
+        <script>
+            function dataBound() {
+                this.expandRow(this.tbody.find("tr.k-master-row").first());
+            }
+        </script>
+        @*<script id="template" type="text/kendo-tmpl">
+              @(Html.Kendo().Grid<sp_ChiTietPhieuThuResult>()
+                .Name("home_ct") // template expression, to be evaluated in the master context
+                .Columns(columns =>
+                {
+                    columns.Bound(o => o.SoPhieu).Title("Số Phiếu");
+                    columns.Bound(o => o.MaMH).Title("Mã");
+                    columns.Bound(o => o.NoiDung).Title("Nội dung");
+                    columns.Bound(o => o.SoTien).Title("Số tiền (VNĐ)");
+                })
+                .DataSource(dataSource => dataSource
+                    .Ajax()
+                    .PageSize(10)
+                    .Read(read => read.Action("Read_DanhSachChiTietPhieuThu", "Home", new { pSoPhieu = "{0}" }).Type(HttpVerbs.Get))
+                )
+                .Pageable()
+                .Sortable()
+                .ToClientTemplate()
+        )
+            </script>
+            <script>
+                function dataBound() {
+                    this.expandRow(this.tbody.find("tr.k-master-row").first());
+                }
+            </script>*@
+
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*@(Html.Kendo().Grid<sp_DanhSachQuanLyThuResult>()
+        .Name("grid")
+        .Columns(columns => {
+            columns.Bound(p => p.SoPhieu).Title("Số phiếu");
+            columns.Bound(p => p.NoiDung).Title("Nội dung thu");
+            columns.Bound(p => p.SoTienThu).Title("Số tiền thu (VNĐ)");
+            columns.Bound(p => p.NgayThanhToan).Title("Ngày thanh toán").Format("{0:d/M/yyyy HH:mm:ss}");
+            columns.Bound(p => p.TrangThai).Title("Trạng thái giao dịch");
+        })
+        .Pageable()//phân trang
+        .Sortable()//hiển bị sắp sếp
+        .Scrollable()//Bật cuộn của gg
+        .Filterable()//Bật lộc
+        .HtmlAttributes(new { style = "height:550px;" })
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .PageSize(5)
+            .Read(read => read.Action("Read_DanhSachPhieuThu", "Home"))
+
+         )
+    )*@
+
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*@(Html.Kendo().Grid<sp_DanhSachQuanLyThuResult>()
+        .Name("grid")
+        .Columns(columns => {
+            columns.Bound(p => p.SoPhieu).Title("Số phiếu");
+            columns.Bound(p => p.NoiDung).Title("Nội dung thu");
+            columns.Bound(p => p.SoTienThu).Title("Số tiền thu (VNĐ)");
+            columns.Bound(p => p.NgayThanhToan).Title("Ngày thanh toán").Format("{0:d/M/yyyy HH:mm:ss}");
+            columns.Bound(p => p.TrangThai).Title("Trạng thái giao dịch");
+        })
+        .Pageable()//phân trang
+        .Sortable()//hiển bị sắp sếp
+        .Scrollable()//Bật cuộn của gg
+        .Filterable()//Bật lộc
+        .HtmlAttributes(new { style = "height:550px;" })
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .PageSize(5)
+            .Read(read => read.Action("Read_DanhSachPhieuThu", "Home"))
+
+         )
+    )*@

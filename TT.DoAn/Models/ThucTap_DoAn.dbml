@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="ThucTap_DoAn" Class="ThucTap_DoAnDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=DESKTOP-QGV07E1;Initial Catalog=ThucTap_DoAn;Persist Security Info=True;User ID=sa" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="ThucTap_DoAnConnectionString" Provider="System.Data.SqlClient" />
+  <Function Name="dbo.sp_DanhSachQuanLyThu" Method="sp_DanhSachQuanLyThu">
+    <ElementType Name="sp_DanhSachQuanLyThuResult">
+      <Column Name="SoPhieu" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="NoiDung" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="SoTienThu" Type="System.Decimal" DbType="Decimal(18,0)" CanBeNull="true" />
+      <Column Name="NgayThanhToan" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="TrangThai" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.sp_DeletePhieuThu" Method="sp_DeletePhieuThu">
+    <Parameter Name="soPhieu" Type="System.String" DbType="VarChar(100)" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.sp_ChiTietPhieuThu" Method="sp_ChiTietPhieuThu">
+    <Parameter Name="soPhieu" Type="System.String" DbType="VarChar(100)" />
+    <ElementType Name="sp_ChiTietPhieuThuResult">
+      <Column Name="SoPhieu" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="MaMH" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="NoiDung" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="SoTien" Type="System.Decimal" DbType="Decimal(18,0)" CanBeNull="true" />
+    </ElementType>
+  </Function>
+</Database>
