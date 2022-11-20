@@ -74,7 +74,7 @@
                                     .HeaderHtmlAttributes(new { style = "text-align: center; justify-content: center" });
                                 columns.Bound(p => p.NoiDung).Title("Nội dung thu")
                                     .HeaderHtmlAttributes(new { style = "text-align: center; justify-content: center" });
-                                columns.Bound(p => p.SoTienThu).Title("Số tiền thu (VNĐ)")
+                                columns.Bound(p => p.SoTienThu).Title("Số tiền thu (VNĐ)").Width(195)
                                     .ClientFooterTemplate("Tổng Tiền: #= kendo.format('{0:n3}', sum)#")
                                     .FooterHtmlAttributes(new { style = "text-align: right; color: red" })//footer
                                     .HeaderHtmlAttributes(new { style = "text-align: center; justify-content: center" })//header
@@ -144,23 +144,13 @@
                             .Events(events => events.DataBound("resetRowNumber"))
         )
         <!--Số thứ thự chi tiết-->
-        <script>
-            function(response) {
-                for (var i = 0; i < response.d.results.length; i++) {
-                    response.d.results[i].index = i + 1;
-                }
-                return response;
-            }
-        </script>
         <!--Chi Tiết-->
         <script id="chitiet" type="text/kendo-tmpl">
             @(Html.Kendo().Grid<sp_ChiTietPhieuThuResult>()
                 .Name("chitietphieuthu_#=SoPhieu#") // template expression, to be evaluated in the master context
                 .Columns(columns =>
                 {
-                    columns.Template(p => { }).Title("STT").ClientTemplate("#= ++response #").Width(38)
-                        .HtmlAttributes(new { style = "text-align: center" })
-                        .HeaderHtmlAttributes(new { style = "text-align: center; justify-content: center" });
+                  
                     columns.Bound(o => o.MaMH).Title("Mã");
                     columns.Bound(o => o.NoiDung).Title("Nội dung");
                     columns.Bound(o => o.DonGia).Title("Số tiền (VNĐ)").Format("{0:n3}");
@@ -174,8 +164,6 @@
                     .Read(read => read.Action("Read_DanhSachChiTietPhieuThu", "Home", new { pSoPhieu = "#=SoPhieu#" }))
 
                 )
-                .Events(ev => ev.DataBound("resetRowNumber_CT"))
-
                 .ToClientTemplate()
 
 
