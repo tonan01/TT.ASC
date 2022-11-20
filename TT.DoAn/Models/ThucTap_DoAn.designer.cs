@@ -63,9 +63,9 @@ namespace TT.DoAn.Models
 		}
 		
 		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.sp_DanhSachQuanLyThu")]
-		public ISingleResult<sp_DanhSachQuanLyThuResult> sp_DanhSachQuanLyThu()
+		public ISingleResult<sp_DanhSachQuanLyThuResult> sp_DanhSachQuanLyThu([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="NVarChar(20)")] string ptrangthai)
 		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())));
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), ptrangthai);
 			return ((ISingleResult<sp_DanhSachQuanLyThuResult>)(result.ReturnValue));
 		}
 		
@@ -88,6 +88,8 @@ namespace TT.DoAn.Models
 	{
 		
 		private string _SoPhieu;
+		
+		private string _mssv;
 		
 		private string _NoiDung;
 		
@@ -113,6 +115,22 @@ namespace TT.DoAn.Models
 				if ((this._SoPhieu != value))
 				{
 					this._SoPhieu = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_mssv", DbType="VarChar(10)")]
+		public string mssv
+		{
+			get
+			{
+				return this._mssv;
+			}
+			set
+			{
+				if ((this._mssv != value))
+				{
+					this._mssv = value;
 				}
 			}
 		}
@@ -191,7 +209,7 @@ namespace TT.DoAn.Models
 		
 		private string _NoiDung;
 		
-		private System.Nullable<decimal> _SoTien;
+		private System.Nullable<decimal> _DonGia;
 		
 		public sp_ChiTietPhieuThuResult()
 		{
@@ -245,18 +263,18 @@ namespace TT.DoAn.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SoTien", DbType="Decimal(18,0)")]
-		public System.Nullable<decimal> SoTien
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DonGia", DbType="Decimal(18,0)")]
+		public System.Nullable<decimal> DonGia
 		{
 			get
 			{
-				return this._SoTien;
+				return this._DonGia;
 			}
 			set
 			{
-				if ((this._SoTien != value))
+				if ((this._DonGia != value))
 				{
-					this._SoTien = value;
+					this._DonGia = value;
 				}
 			}
 		}
