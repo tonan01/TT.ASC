@@ -34,9 +34,9 @@ namespace TT.DoAn.Controllers
             return View();
         }
         //json phiếu thu
-        public JsonResult Read_DanhSachPhieuThu([DataSourceRequest] DataSourceRequest request)
+        public JsonResult Read_DanhSachPhieuThu(string pTrangThai,[DataSourceRequest] DataSourceRequest request)
         {
-            return Json(db.sp_DanhSachQuanLyThu().ToList().ToDataSourceResult(request), JsonRequestBehavior.AllowGet);
+            return Json(db.sp_DanhSachQuanLyThu(pTrangThai).ToList().ToDataSourceResult(request), JsonRequestBehavior.AllowGet);
         }
         //json chi tiết phiếu thu
         public ActionResult Read_DanhSachChiTietPhieuThu(string pSoPhieu,[DataSourceRequest] DataSourceRequest request)

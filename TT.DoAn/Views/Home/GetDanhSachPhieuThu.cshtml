@@ -65,27 +65,39 @@
                             .Columns(columns =>
                             {
                                 columns.Template(p => { }).Title("STT").ClientTemplate("#= renderNumber(data) #").Hidden();
-                                columns.Template(p => { }).Title("STT").ClientTemplate("#= renderRecordNumber(data) #");
-                                columns.Bound(p => p.SoPhieu).Title("Số phiếu").HtmlAttributes(new { style = "text-align: center" });
-                                columns.Bound(p => p.NoiDung).Title("Nội dung thu");
-                                columns.Bound(p => p.SoTienThu).Title("Số tiền thu (VNĐ)").Format("{0:n3}")
-                                    .ClientFooterTemplate("Tổng Tiền: #=sum#").Format("{0:n3}")
+                                columns.Template(p => { }).Title("STT").ClientTemplate("#= renderRecordNumber(data) #").Width(38)
+                                    .HtmlAttributes(new { style = "text-align: center" })
+                                    .HeaderHtmlAttributes(new { style = "text-align: center; justify-content: center" });
+                                columns.Bound(p => p.SoPhieu).Title("Số phiếu").HtmlAttributes(new { style = "text-align: center" }).Width(112)
+                                    .HeaderHtmlAttributes(new { style = "text-align: center; justify-content: center" });
+                                columns.Bound(p => p.mssv).Title("MSSV").HtmlAttributes(new { style = "text-align: center" })
+                                    .HeaderHtmlAttributes(new { style = "text-align: center; justify-content: center" });
+                                columns.Bound(p => p.NoiDung).Title("Nội dung thu")
+                                    .HeaderHtmlAttributes(new { style = "text-align: center; justify-content: center" });
+                                columns.Bound(p => p.SoTienThu).Title("Số tiền thu (VNĐ)")
+                                    .ClientFooterTemplate("Tổng Tiền: #= kendo.format('{0:n3}', sum)#")
                                     .FooterHtmlAttributes(new { style = "text-align: right; color: red" })//footer
                                     .HeaderHtmlAttributes(new { style = "text-align: center; justify-content: center" })//header
-                                    .HtmlAttributes(new { style = "text-align: right" });
-                                columns.Bound(p => p.NgayThanhToan).Title("Ngày thanh toán").Format("{0:d/M/yyyy HH:mm:ss}").HtmlAttributes(new { style = "text-align: center" });
+                                    .HtmlAttributes(new { style = "text-align: right" }).Format("{0:n3}");
+                                columns.Bound(p => p.NgayThanhToan).Title("Ngày thanh toán").Format("{0:d/M/yyyy HH:mm:ss}").HtmlAttributes(new { style = "text-align: center" })
+                                    .HeaderHtmlAttributes(new { style = "text-align: center; justify-content: center" });
                                 columns.Bound(p => p.TrangThai).ClientTemplate("#= templateFunction(data) #").Title("Trạng thái giao dịch")
-                                    .HtmlAttributes(new { style = "display: flex;align-items: center;line-height: 26px;" });
+                                    .HtmlAttributes(new { style = "display: flex;align-items: center;line-height: 26px;" })
+                                    .HeaderHtmlAttributes(new { style = "text-align: center; justify-content: center" });
                                 //columns.Command(command => command.Edit()).Width(150);
-                                columns.Command(command => command.Destroy()).Width(150);
+                                columns.Command(command => command.Destroy()).Width(150)
+                                    .HeaderHtmlAttributes(new { style = "text-align: center; justify-content: center" });
+
                                 // columns.Command(command => command.Custom("Chi Tiết").Click("showDetails"));
                             }).HtmlAttributes(new { style = "align-items: center;" })
+
                             .ToolBar(toolbar =>
                             {
                                 //toolbar.Create();
                                 //toolbar.Save();
                                 toolbar.Pdf();
                                 toolbar.Search();
+
                             })
                             .Pdf(pdf => pdf
                             //.AllPages()
@@ -123,7 +135,7 @@
                                     model.Id(gangster => gangster.SoPhieu);
                                     model.Field(gangster => gangster.SoPhieu).Editable(false);
                                 })
-                                .Read(read => read.Action("Read_DanhSachPhieuThu", "Home").Type(HttpVerbs.Get))
+                                .Read(read => read.Action("Read_DanhSachPhieuThu", "Home", new { pTrangThai = "%%" }))
                                 //.Create(create => create.Action("ClientCreate", "Grid").Type(HttpVerbs.Post))
                                 //.Update(update => update.Action("ClientsEdit", "Grid", new {id = "{0}"}).Type(HttpVerbs.Post))
                                 .Destroy(destroy => destroy.Action("DeletePhieuThu", "Home", new { pSoPhieu = "{0}"}).Type(HttpVerbs.Post))
@@ -131,16 +143,27 @@
                             .Events(events => events.DataBound("dataBound"))
                             .Events(events => events.DataBound("resetRowNumber"))
         )
+        <!--Số thứ thự chi tiết-->
+        <script>
+            function(response) {
+                for (var i = 0; i < response.d.results.length; i++) {
+                    response.d.results[i].index = i + 1;
+                }
+                return response;
+            }
+        </script>
         <!--Chi Tiết-->
         <script id="chitiet" type="text/kendo-tmpl">
             @(Html.Kendo().Grid<sp_ChiTietPhieuThuResult>()
                 .Name("chitietphieuthu_#=SoPhieu#") // template expression, to be evaluated in the master context
                 .Columns(columns =>
                 {
-                    //columns.Bound(o => o.SoPhieu).Title("Số Phiếu");
+                    columns.Template(p => { }).Title("STT").ClientTemplate("#= ++response #").Width(38)
+                        .HtmlAttributes(new { style = "text-align: center" })
+                        .HeaderHtmlAttributes(new { style = "text-align: center; justify-content: center" });
                     columns.Bound(o => o.MaMH).Title("Mã");
                     columns.Bound(o => o.NoiDung).Title("Nội dung");
-                    columns.Bound(o => o.SoTien).Title("Số tiền (VNĐ)").Format("{0:n3}");
+                    columns.Bound(o => o.DonGia).Title("Số tiền (VNĐ)").Format("{0:n3}");
                 })
                 .Pageable()
                 .Navigatable()
@@ -149,11 +172,19 @@
                     .Ajax()
                     .PageSize(10)
                     .Read(read => read.Action("Read_DanhSachChiTietPhieuThu", "Home", new { pSoPhieu = "#=SoPhieu#" }))
+
                 )
+                .Events(ev => ev.DataBound("resetRowNumber_CT"))
+
                 .ToClientTemplate()
+
+
             )
+
         </script>
         <script>
+            //Số thứ tự
+
             function dataBound() {
                 this.expandRow(this.tbody.find("tr.k-master-row").first());
             }

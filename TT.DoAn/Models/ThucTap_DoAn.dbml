@@ -1,8 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="ThucTap_DoAn" Class="ThucTap_DoAnDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
   <Connection Mode="WebSettings" ConnectionString="Data Source=DESKTOP-QGV07E1;Initial Catalog=ThucTap_DoAn;Persist Security Info=True;User ID=sa" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="ThucTap_DoAnConnectionString" Provider="System.Data.SqlClient" />
   <Function Name="dbo.sp_DanhSachQuanLyThu" Method="sp_DanhSachQuanLyThu">
+    <Parameter Name="ptrangthai" Type="System.String" DbType="NVarChar(20)" />
     <ElementType Name="sp_DanhSachQuanLyThuResult">
       <Column Name="SoPhieu" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="mssv" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
       <Column Name="NoiDung" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
       <Column Name="SoTienThu" Type="System.Decimal" DbType="Decimal(18,0)" CanBeNull="true" />
       <Column Name="NgayThanhToan" Type="System.DateTime" DbType="Date" CanBeNull="true" />
@@ -19,7 +21,7 @@
       <Column Name="SoPhieu" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
       <Column Name="MaMH" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
       <Column Name="NoiDung" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
-      <Column Name="SoTien" Type="System.Decimal" DbType="Decimal(18,0)" CanBeNull="true" />
+      <Column Name="DonGia" Type="System.Decimal" DbType="Decimal(18,0)" CanBeNull="true" />
     </ElementType>
   </Function>
 </Database>
