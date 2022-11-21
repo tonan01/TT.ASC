@@ -1,0 +1,22 @@
+﻿
+@{
+    ViewBag.Title = "DangNhap";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container-fluid" >
+    <div class="form-dang-nhap">
+        <div class="child">
+            <h5 class="title">CỔNG THÔNG TIN SINH VIÊN</h5>
+            <img class="login-img" src="https://play-lh.googleusercontent.com/0x_0UECp4mfji9bJHk3njxFyU_UAEJoyqN0rwa-3j0fAcJuJf7fFZWTowh00e05owH0" />
+            <form action="/Home/XuLyDangNhap" method="post">
+                <input type="text" name="mssv" placeholder="Nhập mã số sinh viên" class="textfield" /><br />
+                <input type="password" name="matkhau" placeholder="Nhập mật khẩu" class="textfield" /><br />
+                <input type="submit" value="Đăng nhập" class="btnlogin" />
+            </form>
+            <div class="error">
+                <label>@ViewBag.Loi</label>
+            </div>
+        </div>
+    </div>
+</div>
+

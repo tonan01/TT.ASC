@@ -1,0 +1,65 @@
+﻿body {
+    margin: 0;
+    padding: 0;
+    background-color: lightgrey;
+}
+.form-dang-nhap {
+    margin: 25px;
+    width: 93%;
+    height: 91vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.form-dang-nhap .child {
+    width: 400px;
+    height: 480px;
+    font-size: 17px;
+    border: 1px solid grey;
+    border-radius: 7px;
+    /*padding: 10px;*/
+    box-shadow: 5px 5px grey;
+    background-color: white;
+
+    text-align: center;
+}
+.form-dang-nhap .child .title {
+    font-size: 20px;
+}
+.form-dang-nhap .child .error{
+    color: red;
+    margin: 5px;
+    text-align: center;
+}
+.form-dang-nhap .child .textfield{
+    width: 350px;
+    height: 40px;
+    border-radius: 30px;
+    margin: 5px 5px;
+    border: 1px solid grey;
+    padding-left: 10px;
+    font-size: 18px;
+}
+.form-dang-nhap .child .login-img{
+    width: 180px;
+    height: 180px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 5px;
+}
+.form-dang-nhap .child .btnlogin {
+    width: 250px;
+    height: 40px;
+    border-radius: 30px;
+    background-color: forestgreen;
+    color: white;
+    border: 0;
+    padding: 10px 15px;
+    margin-left: 0px;
+    margin-top: 10px;
+    font-size: 18px;
+}
+.form-dang-nhap .child .btnlogin:hover {
+    background-color: green;
+}

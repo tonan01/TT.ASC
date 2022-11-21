@@ -19,6 +19,10 @@ namespace TT.DoAn.Controllers
 
         public ActionResult Home()
         {
+            if (Session["sinhvien"] == null)
+            {
+                return RedirectToAction("DangNhap", "Home");
+            }
             return View();
         }
 
@@ -27,19 +31,66 @@ namespace TT.DoAn.Controllers
             return View();
         }
 
+        #region Đăng Nhập
+        public ActionResult DangNhap()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult XuLyDangNhap(FormCollection form)
+        {
+            if (form["mssv"] != "" && form["matkhau"] != "")
+            {
+                string maSV = form["mssv"].ToString();
+                string matKhau = form["matkhau"].ToString();
+                var sinhVien = db.sp_GetSinhVien(maSV, matKhau).FirstOrDefault();
+                if (sinhVien != null)
+                {
+                    //lưu sinh viên
+                    Session["sinhvien"] = sinhVien;
+                    //Trả về trang mấy ông muốn sau khi đăng nhập thành công!
+                    return RedirectToAction("Home", "Home");
+                }
+                else
+                {
+                    ViewBag.Loi = "Mã số sinh viên/mật khẩu không chính xác!";
+                }
+            }
+            else
+            {
+                ViewBag.Loi = "Mã số sinh viên/mật khẩu không được để trống";
+            }
+            return View("DangNhap");
+        }
+        #endregion
+
+        #region Đăng xuất
+        public ActionResult DangXuat()
+        {
+            Session["sinhvien"] = null;
+            return RedirectToAction("DangNhap", "Home");
+        }
+        #endregion
+
         #region Quản lý phiếu thu
 
         public ActionResult GetDanhSachPhieuThu()
         {
+            if (Session["sinhvien"] == null)
+            {
+                return RedirectToAction("DangNhap", "Home");
+            }
             return View();
+
         }
         //json phiếu thu
-        public JsonResult Read_DanhSachPhieuThu(string pTrangThai,[DataSourceRequest] DataSourceRequest request)
+        public JsonResult Read_DanhSachPhieuThu(string pTrangThai, [DataSourceRequest] DataSourceRequest request)
         {
             return Json(db.sp_DanhSachQuanLyThu(pTrangThai).ToList().ToDataSourceResult(request), JsonRequestBehavior.AllowGet);
         }
         //json chi tiết phiếu thu
-        public ActionResult Read_DanhSachChiTietPhieuThu(string pSoPhieu,[DataSourceRequest] DataSourceRequest request)
+        public ActionResult Read_DanhSachChiTietPhieuThu(string pSoPhieu, [DataSourceRequest] DataSourceRequest request)
         {
             return Json(db.sp_ChiTietPhieuThu(pSoPhieu).ToList().ToDataSourceResult(request), JsonRequestBehavior.AllowGet);
         }
@@ -63,5 +114,5 @@ namespace TT.DoAn.Controllers
             return RedirectToAction("GetDanhSachPhieuThu", "Home");
             #endregion
         }
-    } 
+    }
 }
