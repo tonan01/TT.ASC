@@ -24,4 +24,17 @@
       <Column Name="DonGia" Type="System.Decimal" DbType="Decimal(18,0)" CanBeNull="true" />
     </ElementType>
   </Function>
+  <Function Name="dbo.sp_GetSinhVien" Method="sp_GetSinhVien">
+    <Parameter Name="mssv" Type="System.String" DbType="VarChar(20)" />
+    <Parameter Name="matkhau" Type="System.String" DbType="NVarChar(100)" />
+    <ElementType Name="sp_GetSinhVienResult">
+      <Column Name="Mssv" Type="System.String" DbType="VarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="Hoten" Type="System.String" DbType="NVarChar(30)" CanBeNull="true" />
+      <Column Name="Gioitinh" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Column Name="Ngaysinh" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="Lophoc" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="Mail" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="MatKhau" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+    </ElementType>
+  </Function>
 </Database>

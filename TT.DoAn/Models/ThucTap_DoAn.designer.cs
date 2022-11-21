@@ -82,6 +82,13 @@ namespace TT.DoAn.Models
 			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), soPhieu);
 			return ((ISingleResult<sp_ChiTietPhieuThuResult>)(result.ReturnValue));
 		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.sp_GetSinhVien")]
+		public ISingleResult<sp_GetSinhVienResult> sp_GetSinhVien([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(20)")] string mssv, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="NVarChar(100)")] string matkhau)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), mssv, matkhau);
+			return ((ISingleResult<sp_GetSinhVienResult>)(result.ReturnValue));
+		}
 	}
 	
 	public partial class sp_DanhSachQuanLyThuResult
@@ -275,6 +282,140 @@ namespace TT.DoAn.Models
 				if ((this._DonGia != value))
 				{
 					this._DonGia = value;
+				}
+			}
+		}
+	}
+	
+	public partial class sp_GetSinhVienResult
+	{
+		
+		private string _Mssv;
+		
+		private string _Hoten;
+		
+		private string _Gioitinh;
+		
+		private System.Nullable<System.DateTime> _Ngaysinh;
+		
+		private string _Lophoc;
+		
+		private string _Mail;
+		
+		private string _MatKhau;
+		
+		public sp_GetSinhVienResult()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Mssv", DbType="VarChar(10) NOT NULL", CanBeNull=false)]
+		public string Mssv
+		{
+			get
+			{
+				return this._Mssv;
+			}
+			set
+			{
+				if ((this._Mssv != value))
+				{
+					this._Mssv = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Hoten", DbType="NVarChar(30)")]
+		public string Hoten
+		{
+			get
+			{
+				return this._Hoten;
+			}
+			set
+			{
+				if ((this._Hoten != value))
+				{
+					this._Hoten = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Gioitinh", DbType="NVarChar(10)")]
+		public string Gioitinh
+		{
+			get
+			{
+				return this._Gioitinh;
+			}
+			set
+			{
+				if ((this._Gioitinh != value))
+				{
+					this._Gioitinh = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Ngaysinh", DbType="Date")]
+		public System.Nullable<System.DateTime> Ngaysinh
+		{
+			get
+			{
+				return this._Ngaysinh;
+			}
+			set
+			{
+				if ((this._Ngaysinh != value))
+				{
+					this._Ngaysinh = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Lophoc", DbType="VarChar(10)")]
+		public string Lophoc
+		{
+			get
+			{
+				return this._Lophoc;
+			}
+			set
+			{
+				if ((this._Lophoc != value))
+				{
+					this._Lophoc = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Mail", DbType="VarChar(50)")]
+		public string Mail
+		{
+			get
+			{
+				return this._Mail;
+			}
+			set
+			{
+				if ((this._Mail != value))
+				{
+					this._Mail = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MatKhau", DbType="NVarChar(100)")]
+		public string MatKhau
+		{
+			get
+			{
+				return this._MatKhau;
+			}
+			set
+			{
+				if ((this._MatKhau != value))
+				{
+					this._MatKhau = value;
 				}
 			}
 		}
