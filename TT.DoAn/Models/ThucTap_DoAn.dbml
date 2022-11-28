@@ -37,4 +37,20 @@
       <Column Name="MatKhau" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
     </ElementType>
   </Function>
+  <Function Name="dbo.sp_ChiTietPhieuThuIn_PDF" Method="sp_ChiTietPhieuThuIn_PDF">
+    <Parameter Name="soPhieu" Type="System.String" DbType="VarChar(100)" />
+    <ElementType Name="sp_ChiTietPhieuThuIn_PDFResult">
+      <Column Name="SoPhieu" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="MaMH" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="Mssv" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="Hoten" Type="System.String" DbType="NVarChar(30)" CanBeNull="true" />
+      <Column Name="NoiDung" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="DonGia" Type="System.Decimal" DbType="Decimal(18,0)" CanBeNull="true" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.sp_TrangThai" Method="sp_TrangThai">
+    <ElementType Name="sp_TrangThaiResult">
+      <Column Name="TrangThai" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+    </ElementType>
+  </Function>
 </Database>

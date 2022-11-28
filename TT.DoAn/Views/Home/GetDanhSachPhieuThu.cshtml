@@ -1,6 +1,7 @@
 ﻿
 @using Kendo.Mvc.UI
 @using TT.DoAn.Models
+@using TT.DoAn.ViewModel
 @{
     ViewBag.Title = "GetDanhSachPhieuThu";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -12,11 +13,35 @@
 </div>
 <div class="row">
     <div class="col-3">
-
+        <button type="button" id="btn_InPhieuThu" class="btn btn-info" style="margin-top: 72px;"><i class="fa-regular fa-file-pdf"></i> In Phiếu thu</button>
     </div>
+    <!--Start Chọn Trạng Thái -->
     <div class="col-3">
-
+        @(Html.Kendo().DropDownList()
+            .Name("kendodropdownlist")
+            .HtmlAttributes(new { style = "width:100%" })
+            .OptionLabel("Chọn trạng thái...")
+            .DataTextField("TrangThai")
+            .DataValueField("TrangThai")
+            .Height(200)
+            .DataSource(source =>
+            {
+                source.Read(read =>
+                {
+                    read.Action("Read_TrangThaiPhieuThu", "Home");
+                });
+            })
+            .Events(e => e
+                .Change("onChange")
+                )
+        )
     </div>
+
+
+    <!--End Chọn Trạng Thái -->
+
+
+
     <div class="col-3">
 
     </div>
@@ -35,8 +60,8 @@
 
 <div class="row">
     <div class="col-12">
-        <!-- Số Thứ Tự home bảo-->
         <script type="text/javascript">
+            //Start Số Thứ Tự home
             var rowNumber = 0;
             function resetRowNumber(e) {
                 rowNumber = 0;
@@ -49,7 +74,9 @@
                 var pagesize = $("#home").data("kendoGrid").dataSource.pageSize();
                 return parseInt(rowNumber + (parseInt(page) * parseInt(pagesize)));
             }
-            //đổi icon trạng thái
+            //End Số Thứ Tự home
+
+            // Start đổi icon trạng thái
             function templateFunction(item) {
                 if (item.TrangThai == "Thành công") {
                     return "<span class='trangthai_thanhcong_icon'></span> <span class='trangthai-text' > " + item.TrangThai + "</span > ";
@@ -59,7 +86,9 @@
                 }
                 return item.TrangThai;
             }
+            // End đổi icon trạng thái
         </script>
+        <!--Start HIện phiếu thu-->
         @(Html.Kendo().Grid <sp_DanhSachQuanLyThuResult>()
                             .Name("home")
                             .Columns(columns =>
@@ -85,7 +114,7 @@
                                     .HtmlAttributes(new { style = "display: flex;align-items: center;line-height: 26px;" })
                                     .HeaderHtmlAttributes(new { style = "text-align: center; justify-content: center" });
                                 //columns.Command(command => { command.Destroy(); command.Edit(); }).Width(150);
-                                columns.Command(command => command.Destroy()).Width(150)
+                                columns.Command(command => command.Destroy()).Width(150).Exportable(false)
                                     .HeaderHtmlAttributes(new { style = "text-align: center; justify-content: center" });
                             }).HtmlAttributes(new { style = "align-items: center;" })
 
@@ -143,15 +172,38 @@
                             .Events(events => events.DataBound("dataBound"))
                             .Events(events => events.DataBound("resetRowNumber"))
         )
-        <!--Số thứ thự chi tiết-->
-        <!--Chi Tiết-->
+        <!--End HIện phiếu thu-->
+        <!--Start In pdf-->
+        <script>
+            $(function () {$('#btn_InPhieuThu').on('click', function () {
+            var grid = $("#home").data("kendoGrid");
+            let selected = grid.select(); //row selected
+            if (selected.length === 0) {
+                kendo.alert("Vui lòng chọn phiếu thu trước khi in phiếu thu");
+            }
+            else {
+                var selectedItem = grid.dataItem(grid.select());
+                var SoPhieu = selectedItem.SoPhieu;
+                //var soPhieu = selectedItem.soPhieu;
+                $.ajax({
+                type: "POST",
+                    url: "@Url.Action("Export", "Home")",
+                    data: { pSoPhieu : SoPhieu },
+                    success: function () {
+                        kendo.alert('Tải Thành công')
+                }
+                });
+            }
+        });})
+        </script>
+        <!--End In pdf-->
+        <!--Start Chi Tiết-->
         <script id="chitiet" type="text/kendo-tmpl">
-            @(Html.Kendo().Grid<sp_ChiTietPhieuThuResult>()
+            @(Html.Kendo().Grid<ChiTietPhieuThu>()
                 .Name("chitietphieuthu_#=SoPhieu#") // template expression, to be evaluated in the master context
                 .Columns(columns =>
                 {
-                    columns.Template(p => { }).Title("STT").ClientTemplate("#= renderNumber(data) #").Hidden();
-                    columns.Template(p => { }).Title("STT").ClientTemplate("#= renderRecordNumber(data) #").Width(38)
+                    columns.Bound(p => p.STT).Title("STT").Width(38)
                         .HtmlAttributes(new { style = "text-align: center" })
                         .HeaderHtmlAttributes(new { style = "text-align: center; justify-content: center" });
                     columns.Bound(o => o.MaMH).Title("Mã").Width(195)
@@ -176,14 +228,45 @@
 
 
             )
-
         </script>
-        <script>
-            //Số thứ tự
 
+        <script>
+       function onChange() {
+           var TrangThai = $("#kendodropdownlist").data("kendoDropDownList").value();
+           if (TrangThai != "Chọn trạng thái...") {
+                $(function () {
+                    $.ajax({
+                        type: "POST",
+                        url: "@Url.Action("Read_DanhSachPhieuThu", "Home")",
+                        data: { pTrangThai: "%" + TrangThai + "%" },
+                        success: function (result) {
+                            $('#home').data("kendoGrid").dataSource.data(result);
+                        }
+                    });
+                });
+            }
+            else {
+                $(function () {
+                    $.ajax({
+                        type: "POST",
+                        url: "@Url.Action("Read_DanhSachPhieuThu", "Home")",
+                        data: { pTrangThai: "%%" },
+                        success: function (result) {
+                            $('#home').data("kendoGrid").dataSource.data(result);
+                        }
+                    });
+                });
+            }
+
+        }
+        </script>
+        <!--End Chi Tiết-->
+        <script>
+            // Start Số thứ tự
             function dataBound() {
                 this.expandRow(this.tbody.find("tr.k-master-row").first());
             }
+                    // End Số thứ tự
         </script>
     </div>
 </div>

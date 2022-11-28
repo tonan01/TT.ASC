@@ -89,6 +89,20 @@ namespace TT.DoAn.Models
 			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), mssv, matkhau);
 			return ((ISingleResult<sp_GetSinhVienResult>)(result.ReturnValue));
 		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.sp_ChiTietPhieuThuIn_PDF")]
+		public ISingleResult<sp_ChiTietPhieuThuIn_PDFResult> sp_ChiTietPhieuThuIn_PDF([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(100)")] string soPhieu)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), soPhieu);
+			return ((ISingleResult<sp_ChiTietPhieuThuIn_PDFResult>)(result.ReturnValue));
+		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.sp_TrangThai")]
+		public ISingleResult<sp_TrangThaiResult> sp_TrangThai()
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())));
+			return ((ISingleResult<sp_TrangThaiResult>)(result.ReturnValue));
+		}
 	}
 	
 	public partial class sp_DanhSachQuanLyThuResult
@@ -416,6 +430,148 @@ namespace TT.DoAn.Models
 				if ((this._MatKhau != value))
 				{
 					this._MatKhau = value;
+				}
+			}
+		}
+	}
+	
+	public partial class sp_ChiTietPhieuThuIn_PDFResult
+	{
+		
+		private string _SoPhieu;
+		
+		private string _MaMH;
+		
+		private string _Mssv;
+		
+		private string _Hoten;
+		
+		private string _NoiDung;
+		
+		private System.Nullable<decimal> _DonGia;
+		
+		public sp_ChiTietPhieuThuIn_PDFResult()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SoPhieu", DbType="VarChar(100) NOT NULL", CanBeNull=false)]
+		public string SoPhieu
+		{
+			get
+			{
+				return this._SoPhieu;
+			}
+			set
+			{
+				if ((this._SoPhieu != value))
+				{
+					this._SoPhieu = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MaMH", DbType="VarChar(100) NOT NULL", CanBeNull=false)]
+		public string MaMH
+		{
+			get
+			{
+				return this._MaMH;
+			}
+			set
+			{
+				if ((this._MaMH != value))
+				{
+					this._MaMH = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Mssv", DbType="VarChar(10)")]
+		public string Mssv
+		{
+			get
+			{
+				return this._Mssv;
+			}
+			set
+			{
+				if ((this._Mssv != value))
+				{
+					this._Mssv = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Hoten", DbType="NVarChar(30)")]
+		public string Hoten
+		{
+			get
+			{
+				return this._Hoten;
+			}
+			set
+			{
+				if ((this._Hoten != value))
+				{
+					this._Hoten = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_NoiDung", DbType="NVarChar(100)")]
+		public string NoiDung
+		{
+			get
+			{
+				return this._NoiDung;
+			}
+			set
+			{
+				if ((this._NoiDung != value))
+				{
+					this._NoiDung = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DonGia", DbType="Decimal(18,0)")]
+		public System.Nullable<decimal> DonGia
+		{
+			get
+			{
+				return this._DonGia;
+			}
+			set
+			{
+				if ((this._DonGia != value))
+				{
+					this._DonGia = value;
+				}
+			}
+		}
+	}
+	
+	public partial class sp_TrangThaiResult
+	{
+		
+		private string _TrangThai;
+		
+		public sp_TrangThaiResult()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TrangThai", DbType="NVarChar(20)")]
+		public string TrangThai
+		{
+			get
+			{
+				return this._TrangThai;
+			}
+			set
+			{
+				if ((this._TrangThai != value))
+				{
+					this._TrangThai = value;
 				}
 			}
 		}
