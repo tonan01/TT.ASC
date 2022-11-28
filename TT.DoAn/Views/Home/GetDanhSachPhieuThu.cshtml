@@ -88,6 +88,37 @@
             }
             // End đổi icon trạng thái
         </script>
+        <!--Combobox-->
+        <script>
+       function onChange() {
+           var TrangThai = $("#kendodropdownlist").data("kendoDropDownList").value();
+           if (TrangThai != "Chọn trạng thái...") {
+                $(function () {
+                    $.ajax({
+                        type: "POST",
+                        url: "@Url.Action("Read_Change_TrangThai_DanhSachPhieuThu", "Home")",
+                        data: { pTrangThai: "%" + TrangThai + "%" },
+                        success: function (result) {
+                            $("#home").data("kendoGrid").dataSource.data(result);
+                        }
+                    });
+                });
+            }
+            else {
+                $(function () {
+                    $.ajax({
+                        type: "POST",
+                        url: "@Url.Action("Read_Change_TrangThai_DanhSachPhieuThu", "Home")",
+                        data: { pTrangThai: "%%" },
+                        success: function (result) {
+                            $("#home").data("kendoGrid").dataSource.data(result);
+                        }
+                    });
+                });
+            }
+
+        }
+        </script>
         <!--Start HIện phiếu thu-->
         @(Html.Kendo().Grid <sp_DanhSachQuanLyThuResult>()
                             .Name("home")
@@ -230,43 +261,14 @@
             )
         </script>
 
-        <script>
-       function onChange() {
-           var TrangThai = $("#kendodropdownlist").data("kendoDropDownList").value();
-           if (TrangThai != "Chọn trạng thái...") {
-                $(function () {
-                    $.ajax({
-                        type: "POST",
-                        url: "@Url.Action("Read_DanhSachPhieuThu", "Home")",
-                        data: { pTrangThai: "%" + TrangThai + "%" },
-                        success: function (result) {
-                            $('#home').data("kendoGrid").dataSource.data(result);
-                        }
-                    });
-                });
-            }
-            else {
-                $(function () {
-                    $.ajax({
-                        type: "POST",
-                        url: "@Url.Action("Read_DanhSachPhieuThu", "Home")",
-                        data: { pTrangThai: "%%" },
-                        success: function (result) {
-                            $('#home').data("kendoGrid").dataSource.data(result);
-                        }
-                    });
-                });
-            }
 
-        }
-        </script>
         <!--End Chi Tiết-->
         <script>
             // Start Số thứ tự
             function dataBound() {
                 this.expandRow(this.tbody.find("tr.k-master-row").first());
             }
-                    // End Số thứ tự
+                            // End Số thứ tự
         </script>
     </div>
 </div>
