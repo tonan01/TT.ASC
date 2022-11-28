@@ -113,6 +113,11 @@ namespace TT.DoAn.Controllers
         {
             return Json(db.sp_DanhSachQuanLyThu(pTrangThai).ToList().ToDataSourceResult(request), JsonRequestBehavior.AllowGet);
         }
+        //json tất cả phiếu thu
+        public JsonResult Read_Change_TrangThai_DanhSachPhieuThu(string pTrangThai)
+        {
+            return Json(db.sp_DanhSachQuanLyThu(pTrangThai).ToList(), JsonRequestBehavior.AllowGet);
+        }
         //json chi tiết phiếu thu
         public ActionResult Read_DanhSachChiTietPhieuThu(string pSoPhieu, [DataSourceRequest] DataSourceRequest request)
         {
@@ -159,6 +164,10 @@ namespace TT.DoAn.Controllers
         }
 
         //in phiếu thu
+        public void InPhieuThuSV(string pSoPhieu)
+        {
+
+        }
         
 
 
