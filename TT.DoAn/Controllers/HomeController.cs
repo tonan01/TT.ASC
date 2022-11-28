@@ -25,6 +25,8 @@ using iTextSharp.text;
 using iTextSharp.text.pdf;
 using System.Web.Hosting;
 using NReco.PdfGenerator;
+using Org.BouncyCastle.Asn1.Ocsp;
+using Magnum.FileSystem;
 
 namespace TT.DoAn.Controllers
 {
@@ -105,7 +107,7 @@ namespace TT.DoAn.Controllers
         }
         //Trạng Thái phiếu thu
         public JsonResult Read_TrangThaiPhieuThu()
-        { 
+        {
             return Json(db.sp_TrangThai().ToList(), JsonRequestBehavior.AllowGet);
         }
         //json phiếu thu
@@ -163,13 +165,50 @@ namespace TT.DoAn.Controllers
             #endregion
         }
 
-        //in phiếu thu
-        public void InPhieuThuSV(string pSoPhieu)
-        {
+        ////in phiếu thu
+        //public ActionResult InPhieuThu(string pSoPhieu)
+        //{
 
-        }
-        
+        //    var inPhieuThu = db.sp_ChiTietPhieuThuIn_PDF(pSoPhieu).ToList();
+        //    if (inPhieuThu == null)
+        //    {
+        //        return RedirectToAction("Error", "Home");
+        //    }
+        //    var TTPhieuThu = db.sp_ChiTietPhieuThuIn_PDF(pSoPhieu).FirstOrDefault();
+        //    ViewBag.SP = TTPhieuThu.SoPhieu;
+        //    ViewBag.MS = TTPhieuThu.Mssv;
+        //    ViewBag.HT = TTPhieuThu.Hoten;
+        //    //Session["SP"] = TTPhieuThu.SoPhieu;
+        //    //Session["MS"] = TTPhieuThu.Mssv;
+        //    //Session["HT"] = TTPhieuThu.Hoten;
+        //    int stt = 0;
+        //    List<InChiTietPhieuThu> lst_InchiTietPhieus = new List<InChiTietPhieuThu>();
+        //    foreach (var item in inPhieuThu)
+        //    {
+        //        stt++;
+        //        InChiTietPhieuThu ct = new InChiTietPhieuThu();
+        //        ct.STT = stt;
+        //        ct.SoPhieu = item.SoPhieu;
+        //        ct.MaMH = item.MaMH;
+        //        ct.Mssv = item.Mssv;
+        //        ct.Hoten = item.Hoten;
+        //        ct.NoiDung = item.NoiDung;
+        //        ct.DonGia = item.DonGia;
+        //        lst_InchiTietPhieus.Add(ct);
+        //    }
+        //    return View(lst_InchiTietPhieus);
+        //    //        return report;
+        //}
+        //public ActionResult ExportPDF(string pSoPhieu)
+        //{
 
+        //    ActionAsPdf resultPdf = new ActionAsPdf("InPhieuThu", new { pSoPhieu = pSoPhieu })
+        //    {
+        //        FileName = Server.MapPath("~Content/resultSheet.pdf")
+        //    };
+        //    return resultPdf;
+
+        //}
 
     }
 }

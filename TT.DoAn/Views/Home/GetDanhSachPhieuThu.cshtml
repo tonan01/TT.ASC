@@ -13,14 +13,15 @@
 </div>
 <div class="row">
     <div class="col-3">
-        <button type="button" id="btn_InPhieuThu" class="btn btn-info" style="margin-top: 72px;"><i class="fa-regular fa-file-pdf"></i> In Phiếu thu</button>
+        @*<button type="button" id="btn_InPhieuThu" class="btn btn-info" style="margin-top: 72px;width:100%;"><i class="fa-regular fa-file-pdf"></i> In Phiếu thu</button>*@
     </div>
     <!--Start Chọn Trạng Thái -->
     <div class="col-3">
-        @(Html.Kendo().DropDownList()
+        <div style="margin-top: 72px;">
+            @(Html.Kendo().DropDownList()
             .Name("kendodropdownlist")
             .HtmlAttributes(new { style = "width:100%" })
-            .OptionLabel("Chọn trạng thái...")
+            .OptionLabel("Tất cả")
             .DataTextField("TrangThai")
             .DataValueField("TrangThai")
             .Height(200)
@@ -35,6 +36,7 @@
                 .Change("onChange")
                 )
         )
+        </div>
     </div>
 
 
@@ -92,7 +94,7 @@
         <script>
        function onChange() {
            var TrangThai = $("#kendodropdownlist").data("kendoDropDownList").value();
-           if (TrangThai != "Chọn trạng thái...") {
+           if (TrangThai != "Tất cả") {
                 $(function () {
                     $.ajax({
                         type: "POST",
@@ -139,13 +141,15 @@
                                     .FooterHtmlAttributes(new { style = "text-align: right; color: red" })//footer
                                     .HeaderHtmlAttributes(new { style = "text-align: center; justify-content: center" })//header
                                     .HtmlAttributes(new { style = "text-align: right" }).Format("{0:##,#}");
-                                columns.Bound(p => p.NgayThanhToan).Title("Ngày thanh toán").Format("{0:d/M/yyyy HH:mm:ss}").HtmlAttributes(new { style = "text-align: center" })
-                                    .HeaderHtmlAttributes(new { style = "text-align: center; justify-content: center" });
+                                columns.Bound(c => c.NgayThanhToan).ClientTemplate("#= kendo.toString(kendo.parseDate(NgayThanhToan), 'd/M/yyyy HH:mm:ss') #")
+                                    .Title("Ngày thanh toán").Width(160)
+                                    .HtmlAttributes(new { style = "text-align:center" })
+                                    .HeaderHtmlAttributes(new { style = "text-align:center" });
                                 columns.Bound(p => p.TrangThai).ClientTemplate("#= templateFunction(data) #").Title("Trạng thái giao dịch")
                                     .HtmlAttributes(new { style = "display: flex;align-items: center;line-height: 26px;" })
-                                    .HeaderHtmlAttributes(new { style = "text-align: center; justify-content: center" });
+                                    .HeaderHtmlAttributes(new { style = "text-align: center; justify-content: center" }).Width(110);
                                 //columns.Command(command => { command.Destroy(); command.Edit(); }).Width(150);
-                                columns.Command(command => command.Destroy()).Width(150).Exportable(false)
+                                columns.Command(command => command.Destroy().Text("Hủy phiếu")).Width(112).Exportable(false).Exportable(false)
                                     .HeaderHtmlAttributes(new { style = "text-align: center; justify-content: center" });
                             }).HtmlAttributes(new { style = "align-items: center;" })
 
@@ -205,7 +209,7 @@
         )
         <!--End HIện phiếu thu-->
         <!--Start In pdf-->
-        <script>
+        @*<script>
             $(function () {$('#btn_InPhieuThu').on('click', function () {
             var grid = $("#home").data("kendoGrid");
             let selected = grid.select(); //row selected
@@ -214,19 +218,20 @@
             }
             else {
                 var selectedItem = grid.dataItem(grid.select());
-                var SoPhieu = selectedItem.SoPhieu;
+                var SoPhieu = selectedItem.SoPhieu
                 //var soPhieu = selectedItem.soPhieu;
                 $.ajax({
                 type: "POST",
-                    url: "@Url.Action("Export", "Home")",
+                    url: "@Url.Action("ExportPDF", "Home")",
                     data: { pSoPhieu : SoPhieu },
                     success: function () {
+
                         kendo.alert('Tải Thành công')
                 }
                 });
             }
         });})
-        </script>
+        </script>*@
         <!--End In pdf-->
         <!--Start Chi Tiết-->
         <script id="chitiet" type="text/kendo-tmpl">
@@ -245,6 +250,13 @@
                     columns.Bound(o => o.DonGia).Title("Số tiền (VNĐ)").Format("{0:n3}")
                         .HtmlAttributes(new { style = "text-align: right" })
                         .HeaderHtmlAttributes(new { style = "text-align: center; justify-content: center" });//header;
+                })
+                .ToolBar(toolbar =>
+                {
+                    //toolbar.Create();
+                    //toolbar.Save();
+                    toolbar.Pdf();
+
                 })
                 .Pageable()
                 .Navigatable()
@@ -268,7 +280,7 @@
             function dataBound() {
                 this.expandRow(this.tbody.find("tr.k-master-row").first());
             }
-                            // End Số thứ tự
+                                                                    // End Số thứ tự
         </script>
     </div>
 </div>
